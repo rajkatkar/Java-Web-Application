@@ -1,4 +1,6 @@
-# Java Web Application with Jenkins CI/CD
+# Java-Web-Application
+
+Java Web Application with Jenkins CI/CD
 
 A production-ready Spring Boot web application with automated CI/CD pipeline for AWS EC2 deployment using Jenkins.
 
@@ -364,3 +366,7 @@ CREATE DATABASE webapp;
 ## License
 
 This project is licensed under the MIT License.
+<<<<<<< HEAD
+=======
+>>>>>>> 5cae7a2 (Adding projects files)
+>>>>>>> 6099840 (removed some files)
