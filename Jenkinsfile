@@ -128,10 +128,22 @@ pipeline {
         }
     }
 
-   post {
+  post {
         success {
             echo 'Pipeline completed successfully!'
-            
+            emailext(
+                subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: "Good news! The build ${env.BUILD_NUMBER} was successful.",
+                to: 'team@example.com'
+            )
+        }
+        failure {
+            echo 'Pipeline failed!'
+            emailext(
+                subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: "Build ${env.BUILD_NUMBER} failed. Please check the console output.",
+                to: 'team@example.com'
+            )
         }
         always {
             echo 'Cleaning up workspace...'
