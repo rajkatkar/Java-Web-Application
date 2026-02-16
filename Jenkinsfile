@@ -37,6 +37,7 @@ pipeline {
                 echo 'Running unit tests...'
                 sh 'mvn test'
             }
+        }
 
 
         stage('Code Quality Analysis') {
