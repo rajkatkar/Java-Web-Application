@@ -121,7 +121,7 @@ pipeline {
                 script {
                     sleep(time: 15, unit: 'SECONDS')
                     sh """
-                        curl -f http://${EC2_HOST}:8080/api/health || exit 1
+                        curl -f http://${EC2_HOST}:8081/api/health || exit 1
                     """
                 }
             }
@@ -131,23 +131,5 @@ pipeline {
   post {
         success {
             echo 'Pipeline completed successfully!'
-            emailext(
-                subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                body: "Good news! The build ${env.BUILD_NUMBER} was successful.",
-                to: 'team@example.com'
-            )
         }
-        failure {
-            echo 'Pipeline failed!'
-            emailext(
-                subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                body: "Build ${env.BUILD_NUMBER} failed. Please check the console output.",
-                to: 'team@example.com'
-            )
-        }
-        always {
-            echo 'Cleaning up workspace...'
-            cleanWs()
-        }
-    }
 }
