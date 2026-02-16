@@ -17,14 +17,18 @@ pipeline {
         DEPLOY_DIR = '/opt/webapp'
     }
 
-    stages {
-        stage('Checkout') {
+     stage('Health Check') {
             steps {
-                echo 'Checking out code from repository...'
-                checkout scm
+                echo 'Performing health check...'
+                script {
+                    sleep(time: 15, unit: 'SECONDS')
+                    sh """
+                        curl -f http://${EC2_HOST}:8080/api/health || exit 1
+                    """
+                }
             }
         }
-
+    }
         stage('Check Java Version') {
     steps {
         sh 'java -version'
