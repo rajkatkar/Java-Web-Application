@@ -128,8 +128,10 @@ pipeline {
         }
     }
 
-  post {
-        success {
-            echo 'Pipeline completed successfully!'
+   post {
+        always {
+            echo "Cleaning workspace..."
+            cleanWs()
         }
-}
+    }
+
