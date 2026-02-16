@@ -129,15 +129,16 @@ pipeline {
     }
 
    post {
-    failure {
-        echo "Email notification skipped"
-        // emailext(...)
+    success {
+        echo 'Pipeline completed successfully!'
     }
-}
-     post {
-        always {
-            echo "Cleaning workspace..."
-            cleanWs()
-        }
+
+    failure {
+        echo 'Pipeline failed!'
+    }
+
+    always {
+        echo 'Cleaning up workspace...'
+        cleanWs()
     }
 }
