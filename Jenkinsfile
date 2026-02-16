@@ -25,6 +25,15 @@ pipeline {
             }
         }
 
+        stage('Check Java Version') {
+    steps {
+        sh 'java -version'
+        sh 'echo JAVA_HOME=$JAVA_HOME'
+        sh 'which java'
+    }
+}
+
+
         stage('Build') {
             steps {
                 echo 'Building application with Maven...'
