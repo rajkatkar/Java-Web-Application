@@ -134,3 +134,10 @@ pipeline {
         // emailext(...)
     }
 }
+     post {
+        always {
+            echo "Cleaning workspace..."
+            cleanWs()
+        }
+    }
+}
