@@ -135,9 +135,10 @@ pipeline {
     }
 }
 
+       post {
         always {
-            echo 'Cleaning up workspace...'
+            echo "Cleaning workspace"
             cleanWs()
         }
     }
-
+}
