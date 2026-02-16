@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'maven3'
-        jdk 'JDK21'
+        maven 'maven'
+        jdk 'jdk21'
     }
 
     environment {
@@ -17,26 +17,13 @@ pipeline {
         DEPLOY_DIR = '/opt/webapp'
     }
 
-     stage('Health Check') {
+    stages {
+        stage('Checkout') {
             steps {
-                echo 'Performing health check...'
-                script {
-                    sleep(time: 15, unit: 'SECONDS')
-                    sh """
-                        curl -f http://${EC2_HOST}:8080/api/health || exit 1
-                    """
-                }
+                echo 'Checking out code from repository...'
+                checkout scm
             }
         }
-    }
-        stage('Check Java Version') {
-    steps {
-        sh 'java -version'
-        sh 'echo JAVA_HOME=$JAVA_HOME'
-        sh 'which java'
-    }
-}
-
 
         stage('Build') {
             steps {
@@ -50,8 +37,12 @@ pipeline {
                 echo 'Running unit tests...'
                 sh 'mvn test'
             }
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
+                }
+            }
         }
-
 
         stage('Code Quality Analysis') {
             steps {
@@ -124,24 +115,20 @@ pipeline {
             }
         }
 
-   stage('Health Check') {
-    steps {
-        script {
-            try {
-                sh '''
-                curl -f http://$EC2_HOST:8080/api/health
-                '''
-                echo "Application is healthy"
-            } catch (Exception e) {
-                echo "Health check failed!"
-                currentBuild.result = 'FAILURE'
-                error("Stopping pipeline due to failed health check")
+        stage('Health Check') {
+            steps {
+                echo 'Performing health check...'
+                script {
+                    sleep(time: 15, unit: 'SECONDS')
+                    sh """
+                        curl -f http://${EC2_HOST}:8080/api/health || exit 1
+                    """
+                }
             }
         }
     }
-}
 
-        post {
+    post {
         success {
             echo 'Pipeline completed successfully!'
             emailext(
