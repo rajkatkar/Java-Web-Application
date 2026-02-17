@@ -4,26 +4,21 @@ services:
   webapp:
     build: .
     ports:
-      - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - DATABASE_URL=${DATABASE_URL}
-      - DATABASE_USERNAME=${DATABASE_USERNAME}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-    restart: unless-stopped
+      - "8081:8081"
+    env_file:
+      - .env
     depends_on:
       - postgres
+    restart: unless-stopped
     networks:
       - app-network
 
   postgres:
     image: postgres:15-alpine
     environment:
-      - POSTGRES_DB=webapp
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: webapp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
